@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "55137588068",
+    "project_id": "app-42451",
+    "storage_bucket": "app-42451.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55137588068:android:026822b79f84c202cbe071",
+        "android_client_info": {
+          "package_name": "Maciek_Dawid.new_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55137588068-kja47l0ndprh9sujsquejj67gh0lijmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuBCTH-5QS57QwJ7JdyxicP7hkgk0i5ZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55137588068-kja47l0ndprh9sujsquejj67gh0lijmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
