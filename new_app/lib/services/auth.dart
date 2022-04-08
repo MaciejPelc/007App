@@ -33,6 +33,13 @@ class AuthService {
   //sign in with email & password
 
   //register with email & password
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      AuthResult
+    } catch(e) {
+
+    }
+  }
 
   //sign out
   Future signOut() async {

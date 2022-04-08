@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Brew Crew'),
+        title: Text('007App'),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         actions: <Widget>[
