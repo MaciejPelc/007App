@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   Register({Key? key, this.toggleView}) : super(key: key);
@@ -14,7 +15,7 @@ class _RegisterState extends State<Register> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final AuthService _auth = AuthService();
+  late AuthService _auth;
   final _formKey = GlobalKey<FormState>();
 
   //text field state
@@ -23,8 +24,14 @@ class _RegisterState extends State<Register> {
   String password2 = '';
   String error = '';
   bool loading = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
+    _auth = context.read<AuthService>();
     return MaterialApp(
       home: loading
           ? CircularProgressIndicator()

@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:new_app/services/database.dart';
 
 import '../models/user.dart';
 
-class AuthService {
+class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? uid;
 
   // create user obj based on FirebaseUser
   MyUser? _userfromFirebase(User? user) {
@@ -37,6 +41,7 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+      uid = result.user!.uid;
       await DataService(uid: user!.uid)
           .createUserData('good note', 'good location', 'good title');
       return _userfromFirebase(user);
@@ -53,7 +58,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-
+      uid = result.user!.uid;
       // create a new document for the user with the uid
       await DataService(uid: user!.uid)
           .createUserData('bad note', 'bad location', 'bad title');

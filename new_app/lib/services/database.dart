@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class DataService {
   final String uid;
@@ -7,18 +8,26 @@ class DataService {
       FirebaseFirestore.instance.collection('Notes');
 
   Future createUserData(String notes, String localisation, String title) async {
-    return await notesCollection.doc(uid).set({
+    final id = Uuid().v1();
+    return await notesCollection.doc(id).set({
+      'id': id,
+      'uid': uid,
       'notes': notes,
       'title': title,
       'localisation': localisation,
+      'createDate': DateTime.now(),
     });
   }
 
   Future addData(String notes, String localisation, String title) async {
-    return await notesCollection.doc(uid).collection("historic").add({
+    final id = Uuid().v1();
+    return await notesCollection.doc(id).set({
+      'id': id,
+      'uid': uid,
       'notes': notes,
       'title': title,
       'localisation': localisation,
+      'createDate': DateTime.now(),
     });
   }
 }

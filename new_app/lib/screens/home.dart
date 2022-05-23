@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:new_app/services/auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
+import '../services/database.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,10 +17,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AuthService _auth = AuthService();
+  late AuthService _auth;
 
   String currentAddress = "my addres";
   Position? currentposition;
+  StreamController<String> controller = StreamController();
 
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
@@ -57,10 +63,20 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    _auth = context.read<AuthService>();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () async {
+            String holder = _auth.uid!;
+            await DataService(uid: holder).addData(titleController.text,
+                bodyController.text, placeController.text);
+          },
           backgroundColor: Colors.amber,
           child: const Icon(Icons.save)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -105,12 +121,11 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 await _determinePosition();
                 if (currentposition != null) {
+                  // currentposition!.latitude.toString() +
+                  //     " " +
+                  //     currentposition!.longitude.toString();
                   placeController.text =
-                      // currentposition!.latitude.toString() +
-                      //     " " +
-                      //     currentposition!.longitude.toString();
-                      placeController.text =
-                          "${currentposition!.latitude} ${currentposition!.longitude}";
+                      "${currentposition!.latitude} ${currentposition!.longitude}";
                 }
                 setState(() {});
               },

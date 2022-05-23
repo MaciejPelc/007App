@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:new_app/screens/log_in.dart';
 import 'package:new_app/screens/wrappers.dart';
+import 'package:new_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -20,7 +22,11 @@ class _SplashState extends State<Splash> {
   _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 3000), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Wrapper()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+              create: (context) => AuthService(), child: Wrapper()),
+        ));
   }
 
   @override
