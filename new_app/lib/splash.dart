@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:new_app/screens/authLook.dart';
+import 'package:new_app/screens/log_in.dart';
 import 'package:new_app/screens/wrappers.dart';
 
 class Splash extends StatefulWidget {

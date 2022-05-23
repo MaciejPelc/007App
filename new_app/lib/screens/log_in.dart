@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/screens/register.dart';
 import 'package:new_app/services/auth.dart';
 
-class Register extends StatefulWidget {
-  Register({Key? key, this.toggleView}) : super(key: key);
+class Authenticate extends StatefulWidget {
+  Authenticate({Key? key}) : super(key: key);
+
+  @override
+  State<Authenticate> createState() => _AuthenticateState();
+}
+
+class _AuthenticateState extends State<Authenticate> {
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() {
+      showSignIn = !showSignIn;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (showSignIn)
+      return SignIn(toggleView: toggleView);
+    else {
+      return Register(toggleView: toggleView);
+    }
+  }
+}
+
+class SignIn extends StatefulWidget {
+  SignIn({Key? key, this.toggleView}) : super(key: key);
 
   final Function? toggleView;
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _RegisterState extends State<Register> {
+class _SignInState extends State<SignIn> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -18,28 +44,28 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
   //text field state
-  String email = '';
-  String password = '';
-  String password2 = '';
+  String email = ' ';
+  String password = ' ';
   String error = '';
   bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: loading
           ? CircularProgressIndicator()
           : Scaffold(
-              body: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Form(
-                    key: _formKey,
+              body: Form(
+                key: _formKey,
+                child: Padding(
+                    padding: EdgeInsets.all(10),
                     child: ListView(
                       children: <Widget>[
                         Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(10),
                             child: Text(
-                              '007App2',
+                              '007App1',
                               style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.w500,
@@ -49,12 +75,14 @@ class _RegisterState extends State<Register> {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(10),
                             child: Text(
-                              'Register',
+                              'Log in',
                               style: TextStyle(fontSize: 20),
                             )),
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextFormField(
+                            validator: (val) =>
+                                val!.isEmpty ? 'Enter an email' : null,
                             onChanged: (val) {
                               setState(() {
                                 email = val;
@@ -70,6 +98,9 @@ class _RegisterState extends State<Register> {
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: TextFormField(
+                            validator: (val) => val!.length < 6
+                                ? 'Enter an a password 6+ chars long'
+                                : null,
                             onChanged: (val) {
                               setState(() {
                                 password = val;
@@ -84,22 +115,6 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          child: TextFormField(
-                            onChanged: (val) {
-                              setState(() {
-                                password2 = val;
-                              });
-                            },
-                            obscureText: true,
-                            controller: passwordController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Repeat password',
-                            ),
-                          ),
-                        ),
-                        Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: ElevatedButton(
@@ -107,14 +122,14 @@ class _RegisterState extends State<Register> {
                               primary: Colors.white, // background
                               onPrimary: Colors.blue, // foreground
                             ),
-                            child: Text('anon',
+                            child: Text('Log in anon',
                                 style: TextStyle(color: Colors.blue)),
                             onPressed: () async {
                               dynamic result = await _auth.signInAnon();
                               if (result == null) {
-                                print('error register');
+                                print('error signing in');
                               } else {
-                                print('Registered');
+                                print('signed in');
                                 print(result.uid);
                               }
                             },
@@ -124,22 +139,23 @@ class _RegisterState extends State<Register> {
                             height: 50,
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
-                                child: Text('Register'),
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    dynamic result = await _auth
-                                        .registerWithEmailAndPassword(
-                                            email, email, password);
-                                    if (result == null) {
-                                      loading = false;
-                                      error =
-                                          'please supply a valid email or/and password ';
-                                    }
+                              child: Text('Log in'),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  dynamic result =
+                                      await _auth.logInWithEmailAndPassword(
+                                          email, password);
+                                  if (result == null) {
+                                    loading = false;
+                                    error =
+                                        'could not log in with those credentials';
                                   }
-                                })),
+                                }
+                              },
+                            )),
                         SizedBox(
                           height: 12,
                         ),
@@ -151,10 +167,10 @@ class _RegisterState extends State<Register> {
                         ),
                         Row(
                           children: <Widget>[
-                            Text('Allready have account?'),
+                            Text('Does not have account?'),
                             TextButton(
                               child: Text(
-                                'Log in',
+                                'Register',
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () async {
@@ -165,8 +181,8 @@ class _RegisterState extends State<Register> {
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
                       ],
-                    ),
-                  )),
+                    )),
+              ),
             ),
     );
   }
