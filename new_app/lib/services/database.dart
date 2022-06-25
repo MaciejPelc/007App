@@ -16,10 +16,15 @@ class DataService {
       'title': title,
       'localisation': localisation,
       'createDate': DateTime.now(),
+      'added': false,
     });
   }
 
-  Future addData(String notes, String localisation, String title) async {
+  Future addData(
+    String title,
+    String notes,
+    String localisation,
+  ) async {
     final id = Uuid().v1();
     return await notesCollection.doc(id).set({
       'id': id,
@@ -28,6 +33,7 @@ class DataService {
       'title': title,
       'localisation': localisation,
       'createDate': DateTime.now(),
+      'added': false,
     });
   }
 }

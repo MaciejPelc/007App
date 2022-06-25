@@ -42,8 +42,8 @@ class AuthService extends ChangeNotifier {
           email: email, password: password);
       User? user = result.user;
       uid = result.user!.uid;
-      await DataService(uid: user!.uid)
-          .createUserData('good note', 'good location', 'good title');
+      // await DataService(uid: user!.uid)
+      //     .createUserData('good note', 'good location', 'good title');
       return _userfromFirebase(user);
     } catch (e) {
       print(e.toString());
@@ -60,8 +60,8 @@ class AuthService extends ChangeNotifier {
       User? user = result.user;
       uid = result.user!.uid;
       // create a new document for the user with the uid
-      await DataService(uid: user!.uid)
-          .createUserData('bad note', 'bad location', 'bad title');
+      // await DataService(uid: user!.uid)
+      //     .createUserData('bad note', 'bad location', 'bad title');
       return _userfromFirebase(user);
     } catch (e) {
       print(e.toString());
